@@ -6,10 +6,11 @@ using NUnit.Framework;
 namespace ElevatorKata02
 {
     [TestFixture]
-    public class ElevatorTests : ILiftMonitor
+    public class ElevatorTests : ILiftMonitor, IObservable<ILiftEvent>
     {
         private List<Floor> _floorsVisited = new List<Floor>();
-        private List<LiftStatus> _liftStatuses = new List<LiftStatus>();
+        private List<LiftStatus> _liftStatuses = new List<LiftStatus>(); 
+        IObserver<ILiftEvent> _currentObserver;
 
         private const int GroundFloor = 0;
         private const int FirstFloor = 1;
@@ -23,9 +24,10 @@ namespace ElevatorKata02
         public void Test01_When_person_in_lift_enters_a_higher_floor_number_then_lift_starts_moving_upwards()
         {
             // Arrange
-            var theLift = new ObservableLift(GroundFloor);
+            var theLift = new ObservableLift(GroundFloor, this);
             _liftStatuses.Clear();
             theLift.Subscribe(this);
+            _currentObserver.OnNext(new LiftMoveRequest());
 
             // Act
             theLift.Move(ThirdFloor);
@@ -222,6 +224,11 @@ namespace ElevatorKata02
         public void OnCompleted()
         {
             // Do nothing
+        }
+
+        public IDisposable Subscribe(IObserver<ILiftEvent> observer)
+        {
+            _currentObserver = observer;
         }
     }
 }

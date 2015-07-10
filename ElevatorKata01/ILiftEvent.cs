@@ -3,7 +3,7 @@
     public interface ILiftEvent
     {
         //Direction Direction { get; set; }
-        int Floor { get; set; }
+        int Floor { get; private set; }
 
         void OnNext(ObservableLift lift);
     }
@@ -11,7 +11,7 @@
     public class LiftEngineUpwardsEvent : ILiftEvent
     {
         //public Direction Direction { get; set; }
-        public int Floor { get; set; }
+        public int Floor { get; private set; }
 
         public void OnNext(ObservableLift lift)
         {
@@ -33,7 +33,12 @@
     public class LiftMoveRequest : ILiftEvent
     {
         //public Direction Direction { get; set; }
-        public int Floor { get; set; }
+        public int Floor { get; private set; }
+
+        public LiftMoveRequest(int floor)
+        {
+            
+        }
 
         public void OnNext(ObservableLift lift)
         {
