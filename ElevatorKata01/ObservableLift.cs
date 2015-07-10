@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
-namespace ElevatorKata01
+namespace ElevatorKata02
 {
     public class ObservableLift : IObservable<LiftStatus>, IDisposable
     {

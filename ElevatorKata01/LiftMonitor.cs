@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ElevatorKata01
+namespace ElevatorKata02
 {
     public class LiftMonitor : ILiftMonitor
     {

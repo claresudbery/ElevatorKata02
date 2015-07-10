@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
-namespace ElevatorKata01
+namespace ElevatorKata02
 {
     /// <summary>
     /// Yeah, ok, I cheated a bit: I got thinking about it while cycling home, and ended up half-coding a whole solution in my head.

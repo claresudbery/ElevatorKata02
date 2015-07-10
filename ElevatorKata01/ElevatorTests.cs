@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using NUnit.Framework;
 
-namespace ElevatorKata01
+namespace ElevatorKata02
 {
     [TestFixture]
     public class ElevatorTests : ILiftMonitor

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElevatorKata01
+namespace ElevatorKata02
 {
     class Program
     {
