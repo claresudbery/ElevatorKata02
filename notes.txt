@@ -1,0 +1,3 @@
+testing and scheduling: http://www.introtorx.com/content/v1.0.10621.0/16_TestingRx.html 
+
+more on testing and scheduling (easier to read): http://haacked.com/archive/2014/03/10/master-time-with-reactive-extensions/
