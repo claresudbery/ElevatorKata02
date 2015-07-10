@@ -7,8 +7,8 @@
     <ProjectGuid>{50B23F14-E043-49C6-B755-7CEF18227582}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ElevatorKata01</RootNamespace>
-    <AssemblyName>ElevatorKata01</AssemblyName>
+    <RootNamespace>ElevatorKata02</RootNamespace>
+    <AssemblyName>ElevatorKata02</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
