@@ -5,30 +5,27 @@ using System.Reactive.Linq;
 
 namespace ElevatorKata02
 {
-    public class ObservableLift : IObservable<LiftStatus>, IDisposable
+    public class ObservableLift : IObservable<LiftStatus>, IDisposable, IObserver<ILiftEvent>
     {
         private readonly List<IObserver<LiftStatus>> _observers = new List<IObserver<LiftStatus>>();
         private int _currentFloor;
         private Direction _currentDirection;
-        private IObservable<int> _liftEngine = null;
-        private IDisposable _liftEngineSubscription = null;
         private readonly List<int> _goingUp = new List<int>();
         private readonly List<int> _goingDown = new List<int>();
+        private ILiftEventGenerator _liftEventGenerator;
 
         private const int TopFloor = 30;
         private const int BottomFloor = -10;
 
         public ObservableLift(
             int startingFloor,
-            IObservable<ILiftEvent> eventGenerator)
+            ILiftEventGenerator liftEventGenerator)
         {
             _currentFloor = startingFloor;
             _currentDirection = Direction.None;
 
-            eventGenerator.Subscribe
-                (
-                    OnNextLiftEvent
-                );
+            _liftEventGenerator = liftEventGenerator;
+            _liftEventGenerator.LiftSubscribe(this);
         }
 
         public IDisposable Subscribe(IObserver<LiftStatus> observer)
@@ -43,11 +40,6 @@ namespace ElevatorKata02
             {
                 observer.OnCompleted();
             }
-        }
-
-        public void OnNextLiftEvent(ILiftEvent liftEvent)
-        {
-            liftEvent.OnNext(this);
         }
 
         public void Move(int destinationFloor)
@@ -71,43 +63,15 @@ namespace ElevatorKata02
 
         private void MoveUpwards()
         {
-            _liftEngine = Observable.Generate
-                (
-                    _currentFloor,
-                    i => i < LastUpFloor,
-                    i => i + 1, // iterator
-                    i => i + 1, // actual value? Shouldn't use same val as iterator?
-                    i => TimeSpan.FromMilliseconds(TimeConstants.FloorInterval)
-                );
-
             _currentDirection = Direction.Up;
-
-            _liftEngineSubscription = _liftEngine.Subscribe
-                (
-                    ArrivedAtFloorOnTheWayUp
-                );
-
+            _liftEventGenerator.StartMovingUpwards(_currentFloor, LastUpFloor);
             NotifyObserversOfCurrentStatus();
         }
 
         private void MoveDownwards()
         {
-            _liftEngine = Observable.Generate
-                (
-                    _currentFloor,
-                    i => i > LastDownFloor,
-                    i => i - 1, // iterator
-                    i => i - 1, // actual value? Shouldn't use same val as iterator?
-                    i => TimeSpan.FromMilliseconds(TimeConstants.FloorInterval)
-                );
-
             _currentDirection = Direction.Down;
-
-            _liftEngineSubscription = _liftEngine.Subscribe
-                (
-                    ArrivedAtFloorOnTheWayDown
-                );
-
+            _liftEventGenerator.StartMovingDownwards(_currentFloor, LastDownFloor);
             NotifyObserversOfCurrentStatus();
         }
 
@@ -212,7 +176,7 @@ namespace ElevatorKata02
         private void Stop()
         {
             _currentDirection = Direction.None;
-            _liftEngineSubscription.Dispose();
+            _liftEventGenerator.Stop();
             NotifyObserversOfCurrentStatus();
         }
 
@@ -229,6 +193,21 @@ namespace ElevatorKata02
                     }
                 );
             }
+        }
+
+        public void OnNext(ILiftEvent liftEvent)
+        {
+            liftEvent.OnNext(this);
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
         }
     }
 }
