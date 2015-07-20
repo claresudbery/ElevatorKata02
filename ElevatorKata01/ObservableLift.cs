@@ -65,14 +65,12 @@ namespace ElevatorKata02
         {
             _currentDirection = Direction.Up;
             _liftEventGenerator.StartMovingUpwards(_currentFloor, LastUpFloor);
-            NotifyObserversOfCurrentStatus();
         }
 
         private void MoveDownwards()
         {
             _currentDirection = Direction.Down;
             _liftEventGenerator.StartMovingDownwards(_currentFloor, LastDownFloor);
-            NotifyObserversOfCurrentStatus();
         }
 
         public bool NoUpFloors
@@ -207,7 +205,7 @@ namespace ElevatorKata02
 
         public void OnCompleted()
         {
-            throw new NotImplementedException();
+            // Do nothing
         }
     }
 }

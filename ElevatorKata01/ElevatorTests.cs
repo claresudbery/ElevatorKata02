@@ -27,17 +27,17 @@ namespace ElevatorKata02
         {
             // Arrange
             var theLift = new ObservableLift(GroundFloor, this);
-            _liftStatuses.Clear();
+            _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
             _currentObserver.OnNext(new LiftMoveRequest { Floor = ThirdFloor });
 
             // Assert
-            Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
+            Assert.That(_liftEngineEvents.Count, Is.GreaterThan(0));
 
-            Assert.That(_liftStatuses[0].CurrentDirection, Is.EqualTo(Direction.Up));
-            Assert.That(_liftStatuses[0].CurrentFloor, Is.EqualTo(GroundFloor));
+            Assert.That(_liftEngineEvents[0].CurrentDirection, Is.EqualTo(Direction.Up));
+            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(GroundFloor));
         }
 
         [Test]
@@ -45,17 +45,17 @@ namespace ElevatorKata02
         {
             // Arrange
             var theLift = new ObservableLift(ThirdFloor, this);
-            _liftStatuses.Clear();
+            _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
             _currentObserver.OnNext(new LiftMoveRequest { Floor = FirstFloor });
 
             // Assert
-            Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
+            Assert.That(_liftEngineEvents.Count, Is.GreaterThan(0));
 
-            Assert.That(_liftStatuses[0].CurrentDirection, Is.EqualTo(Direction.Down));
-            Assert.That(_liftStatuses[0].CurrentFloor, Is.EqualTo(ThirdFloor));
+            Assert.That(_liftEngineEvents[0].CurrentDirection, Is.EqualTo(Direction.Down));
+            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(ThirdFloor));
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace ElevatorKata02
         {
             // Arrange
             var theLift = new ObservableLift(GroundFloor, this);
-            _liftStatuses.Clear();
+            _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
@@ -111,7 +111,7 @@ namespace ElevatorKata02
             Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(GroundFloor));
 
             Assert.That(_liftEngineEvents[1].CurrentDirection, Is.EqualTo(Direction.None));
-            Assert.That(_liftEngineEvents[1].CurrentFloor, Is.EqualTo(ThirdFloor));
+            Assert.That(_liftEngineEvents[1].CurrentFloor, Is.EqualTo(FloorIsIrrelevant));
         }
 
         [Test]
@@ -124,6 +124,7 @@ namespace ElevatorKata02
 
             // Act
             _currentObserver.OnNext(new LiftMoveRequest { Floor = FirstFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = GroundFloor });
 
             // Assert
             Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
@@ -141,11 +142,16 @@ namespace ElevatorKata02
 
             // Act
             _currentObserver.OnNext(new LiftMoveRequest { Floor = FourthFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = GroundFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = FirstFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = SecondFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = ThirdFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = FourthFloor });
 
             // Assert
-            Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
+            Assert.That(_liftStatuses.Count, Is.EqualTo(5));
 
-            Assert.That(_liftStatuses[_liftStatuses.Count - 1].CurrentFloor, Is.EqualTo(FourthFloor));
+            Assert.That(_liftStatuses[4].CurrentFloor, Is.EqualTo(FourthFloor));
         }
 
         [Test]
@@ -153,16 +159,18 @@ namespace ElevatorKata02
         {
             // Arrange
             var theLift = new ObservableLift(GroundFloor, this);
-            _liftStatuses.Clear();
+            _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
             _currentObserver.OnNext(new LiftMoveRequest { Floor = FourthFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = FourthFloor });
 
             // Assert
-            Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
+            Assert.That(_liftEngineEvents.Count, Is.GreaterThan(1));
 
-            Assert.That(_liftStatuses[_liftStatuses.Count - 1].CurrentDirection, Is.EqualTo(Direction.None));
+            Assert.That(_liftEngineEvents[_liftEngineEvents.Count - 1].CurrentDirection, Is.EqualTo(Direction.None));
+            Assert.That(_liftEngineEvents[_liftEngineEvents.Count - 1].CurrentFloor, Is.EqualTo(FloorIsIrrelevant));
         }
 
         [Test]
@@ -170,17 +178,17 @@ namespace ElevatorKata02
         {
             // Arrange
             var theLift = new ObservableLift(GroundFloor, this);
-            _liftStatuses.Clear();
+            _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
             _currentObserver.OnNext(new LiftCall { Floor = ThirdFloor });
 
             // Assert
-            Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
+            Assert.That(_liftEngineEvents.Count, Is.GreaterThan(0));
 
-            Assert.That(_liftStatuses[0].CurrentDirection, Is.EqualTo(Direction.Up));
-            Assert.That(_liftStatuses[0].CurrentFloor, Is.EqualTo(GroundFloor));
+            Assert.That(_liftEngineEvents[0].CurrentDirection, Is.EqualTo(Direction.Up));
+            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(GroundFloor));
         }
 
         [Test]
@@ -188,17 +196,17 @@ namespace ElevatorKata02
         {
             // Arrange
             var theLift = new ObservableLift(ThirdFloor, this);
-            _liftStatuses.Clear();
+            _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
             _currentObserver.OnNext(new LiftCall { Floor = FirstFloor });
 
             // Assert
-            Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
+            Assert.That(_liftEngineEvents.Count, Is.GreaterThan(0));
 
-            Assert.That(_liftStatuses[0].CurrentDirection, Is.EqualTo(Direction.Down));
-            Assert.That(_liftStatuses[0].CurrentFloor, Is.EqualTo(ThirdFloor));
+            Assert.That(_liftEngineEvents[0].CurrentDirection, Is.EqualTo(Direction.Down));
+            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(ThirdFloor));
         }
 
         [Test]
@@ -237,7 +245,7 @@ namespace ElevatorKata02
         {
             // Arrange
             var theLift = new ObservableLift(GroundFloor, this);
-            _liftStatuses.Clear();
+            _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
@@ -254,7 +262,7 @@ namespace ElevatorKata02
             Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(GroundFloor));
 
             Assert.That(_liftEngineEvents[1].CurrentDirection, Is.EqualTo(Direction.None));
-            Assert.That(_liftEngineEvents[1].CurrentFloor, Is.EqualTo(ThirdFloor));
+            Assert.That(_liftEngineEvents[1].CurrentFloor, Is.EqualTo(FloorIsIrrelevant));
         }
 
         [Test]
@@ -267,6 +275,7 @@ namespace ElevatorKata02
 
             // Act
             _currentObserver.OnNext(new LiftCall { Floor = FirstFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = GroundFloor });
 
             // Assert
             Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
@@ -284,11 +293,16 @@ namespace ElevatorKata02
 
             // Act
             _currentObserver.OnNext(new LiftCall { Floor = FourthFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = GroundFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = FirstFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = SecondFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = ThirdFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = FourthFloor });
 
             // Assert
-            Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
+            Assert.That(_liftStatuses.Count, Is.EqualTo(5));
 
-            Assert.That(_liftStatuses[_liftStatuses.Count - 1].CurrentFloor, Is.EqualTo(FourthFloor));
+            Assert.That(_liftStatuses[4].CurrentFloor, Is.EqualTo(FourthFloor));
         }
 
         [Test]
@@ -296,16 +310,18 @@ namespace ElevatorKata02
         {
             // Arrange
             var theLift = new ObservableLift(GroundFloor, this);
-            _liftStatuses.Clear();
+            _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
             _currentObserver.OnNext(new LiftCall { Floor = FourthFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = FourthFloor });
 
             // Assert
-            Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
+            Assert.That(_liftEngineEvents.Count, Is.GreaterThan(1));
 
-            Assert.That(_liftStatuses[_liftStatuses.Count - 1].CurrentDirection, Is.EqualTo(Direction.None));
+            Assert.That(_liftEngineEvents[_liftEngineEvents.Count - 1].CurrentDirection, Is.EqualTo(Direction.None));
+            Assert.That(_liftEngineEvents[_liftEngineEvents.Count - 1].CurrentFloor, Is.EqualTo(FloorIsIrrelevant));
         }
 
         //[Test]
