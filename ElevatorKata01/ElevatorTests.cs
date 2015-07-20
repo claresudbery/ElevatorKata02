@@ -13,305 +13,256 @@ namespace ElevatorKata02
         private List<LiftEngineEvent> _liftEngineEvents = new List<LiftEngineEvent>(); 
         IObserver<ILiftEvent> _currentObserver;
 
-        private const int FloorIsIrrelevant = -1;
-        private const int GroundFloor = 0;
-        private const int FirstFloor = 1;
-        private const int SecondFloor = 2;
-        private const int ThirdFloor = 3;
-        private const int FourthFloor = 4;
-        private const int FifthFloor = 5;
-        private const int SixthFloor = 6;
-
         [Test]
-        public void Test01_When_person_in_lift_enters_a_higher_floor_number_then_lift_is_told_to_start_moving_upwards()
+        public void When_person_in_lift_enters_a_higher_floor_number_then_lift_is_told_to_start_moving_upwards()
         {
             // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
+            var theLift = new ObservableLift(LiftConstants.GroundFloor, this);
             _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftMoveRequest { Floor = ThirdFloor });
+            _currentObserver.OnNext(new LiftMoveRequest { Floor = LiftConstants.ThirdFloor });
 
             // Assert
             Assert.That(_liftEngineEvents.Count, Is.GreaterThan(0));
 
             Assert.That(_liftEngineEvents[0].Direction, Is.EqualTo(Direction.Up));
-            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(GroundFloor));
+            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(LiftConstants.GroundFloor));
         }
 
         [Test]
-        public void Test02_When_person_in_lift_enters_a_lower_floor_number_then_lift_is_told_to_start_moving_downwards()
+        public void When_person_in_lift_enters_a_lower_floor_number_then_lift_is_told_to_start_moving_downwards()
         {
             // Arrange
-            var theLift = new ObservableLift(ThirdFloor, this);
+            var theLift = new ObservableLift(LiftConstants.ThirdFloor, this);
             _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftMoveRequest { Floor = FirstFloor });
+            _currentObserver.OnNext(new LiftMoveRequest { Floor = LiftConstants.FirstFloor });
 
             // Assert
             Assert.That(_liftEngineEvents.Count, Is.GreaterThan(0));
 
             Assert.That(_liftEngineEvents[0].Direction, Is.EqualTo(Direction.Down));
-            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(ThirdFloor));
+            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(LiftConstants.ThirdFloor));
         }
 
         [Test]
-        public void Test01_When_lift_moves_past_floors_then_lift_notifies_direction_and_location_for_every_floor_it_passes()
+        public void When_lift_moves_past_floors_then_lift_notifies_direction_and_location_for_every_floor_it_passes()
         {
             // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
+            var theLift = new ObservableLift(LiftConstants.GroundFloor, this);
             _liftStatuses.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftMoveRequest { Floor = ThirdFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = GroundFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = FirstFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = SecondFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = ThirdFloor });
+            _currentObserver.OnNext(new LiftMoveRequest { Floor = LiftConstants.ThirdFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.GroundFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.FirstFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.SecondFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.ThirdFloor });
 
             // Assert
             Assert.That(_liftStatuses.Count, Is.EqualTo(4));
 
             Assert.That(_liftStatuses[0].CurrentDirection, Is.EqualTo(Direction.Up));
-            Assert.That(_liftStatuses[0].CurrentFloor, Is.EqualTo(GroundFloor));
+            Assert.That(_liftStatuses[0].CurrentFloor, Is.EqualTo(LiftConstants.GroundFloor));
 
             Assert.That(_liftStatuses[1].CurrentDirection, Is.EqualTo(Direction.Up));
-            Assert.That(_liftStatuses[1].CurrentFloor, Is.EqualTo(FirstFloor));
+            Assert.That(_liftStatuses[1].CurrentFloor, Is.EqualTo(LiftConstants.FirstFloor));
 
             Assert.That(_liftStatuses[2].CurrentDirection, Is.EqualTo(Direction.Up));
-            Assert.That(_liftStatuses[2].CurrentFloor, Is.EqualTo(SecondFloor));
+            Assert.That(_liftStatuses[2].CurrentFloor, Is.EqualTo(LiftConstants.SecondFloor));
 
             Assert.That(_liftStatuses[3].CurrentDirection, Is.EqualTo(Direction.None));
-            Assert.That(_liftStatuses[3].CurrentFloor, Is.EqualTo(ThirdFloor));
+            Assert.That(_liftStatuses[3].CurrentFloor, Is.EqualTo(LiftConstants.ThirdFloor));
         }
 
         [Test]
-        public void Test01_When_person_in_lift_enters_a_higher_floor_number_then_lift_engine_is_asked_to_move_upwards_and_then_stopped_when_it_reaches_destination()
+        public void When_person_in_lift_enters_a_higher_floor_number_then_lift_engine_is_asked_to_move_upwards_and_then_stopped_when_it_reaches_destination()
         {
             // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
+            var theLift = new ObservableLift(LiftConstants.GroundFloor, this);
             _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftMoveRequest { Floor = ThirdFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = ThirdFloor });
+            _currentObserver.OnNext(new LiftMoveRequest { Floor = LiftConstants.ThirdFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.ThirdFloor });
 
             // Assert
             Assert.That(_liftEngineEvents.Count, Is.EqualTo(2));
 
             Assert.That(_liftEngineEvents[0].Direction, Is.EqualTo(Direction.Up));
-            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(GroundFloor));
+            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(LiftConstants.GroundFloor));
 
             Assert.That(_liftEngineEvents[1].Direction, Is.EqualTo(Direction.None));
-            Assert.That(_liftEngineEvents[1].CurrentFloor, Is.EqualTo(FloorIsIrrelevant));
+            Assert.That(_liftEngineEvents[1].CurrentFloor, Is.EqualTo(LiftConstants.FloorIsIrrelevant));
         }
 
         [Test]
-        public void Test03_When_person_in_lift_enters_a_floor_number_then_lift_notifies_its_current_location()
-        {
-            // !! ToDo This is an integration test - it should not be here
-            // !! ToDo It is not testing the functionlaity of ObservableLift - what it is testing here is already covered in other tests
-            // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
-            _liftStatuses.Clear();
-            theLift.Subscribe(this);
-
-            // Act
-            _currentObserver.OnNext(new LiftMoveRequest { Floor = FirstFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = GroundFloor });
-
-            // Assert
-            Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
-
-            Assert.That(_liftStatuses[0].CurrentFloor, Is.EqualTo(GroundFloor));
-        }
-
-        [Test]
-        public void Test04_When_person_in_lift_enters_a_floor_number_then_lift_is_told_to_move_to_that_floor()
+        public void When_person_in_lift_enters_a_floor_number_then_lift_is_told_to_move_to_that_floor()
         {
             // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
+            var theLift = new ObservableLift(LiftConstants.GroundFloor, this);
             _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftMoveRequest { Floor = FourthFloor });
+            _currentObserver.OnNext(new LiftMoveRequest { Floor = LiftConstants.FourthFloor });
 
             // Assert
             Assert.That(_liftEngineEvents.Count, Is.GreaterThan(0));
 
             Assert.That(_liftEngineEvents[0].Direction, Is.EqualTo(Direction.Up));
-            Assert.That(_liftEngineEvents[0].LastFloor, Is.EqualTo(FourthFloor));
+            Assert.That(_liftEngineEvents[0].LastFloor, Is.EqualTo(LiftConstants.FourthFloor));
         }
 
         [Test]
-        public void Test05_When_lift_arrives_at_new_floor_after_person_in_lift_makes_request_then_lift_stops_moving()
+        public void When_lift_arrives_at_new_floor_after_person_in_lift_makes_request_then_lift_stops_moving()
         {
             // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
+            var theLift = new ObservableLift(LiftConstants.GroundFloor, this);
             _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftMoveRequest { Floor = FourthFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = FourthFloor });
+            _currentObserver.OnNext(new LiftMoveRequest { Floor = LiftConstants.FourthFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.FourthFloor });
 
             // Assert
             Assert.That(_liftEngineEvents.Count, Is.GreaterThan(1));
 
             Assert.That(_liftEngineEvents[_liftEngineEvents.Count - 1].Direction, Is.EqualTo(Direction.None));
-            Assert.That(_liftEngineEvents[_liftEngineEvents.Count - 1].CurrentFloor, Is.EqualTo(FloorIsIrrelevant));
+            Assert.That(_liftEngineEvents[_liftEngineEvents.Count - 1].CurrentFloor, Is.EqualTo(LiftConstants.FloorIsIrrelevant));
         }
 
         [Test]
-        public void Test01_When_person_calls_lift_to_higher_floor_number_then_lift_is_told_to_start_moving_upwards()
+        public void When_person_calls_lift_to_higher_floor_number_then_lift_is_told_to_start_moving_upwards()
         {
             // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
+            var theLift = new ObservableLift(LiftConstants.GroundFloor, this);
             _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftCall { Floor = ThirdFloor });
+            _currentObserver.OnNext(new LiftCall { Floor = LiftConstants.ThirdFloor });
 
             // Assert
             Assert.That(_liftEngineEvents.Count, Is.GreaterThan(0));
 
             Assert.That(_liftEngineEvents[0].Direction, Is.EqualTo(Direction.Up));
-            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(GroundFloor));
+            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(LiftConstants.GroundFloor));
         }
 
         [Test]
-        public void Test02_When_person_calls_lift_to_lower_floor_number_then_lift_is_told_to_start_moving_downwards()
+        public void When_person_calls_lift_to_lower_floor_number_then_lift_is_told_to_start_moving_downwards()
         {
             // Arrange
-            var theLift = new ObservableLift(ThirdFloor, this);
+            var theLift = new ObservableLift(LiftConstants.ThirdFloor, this);
             _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftCall { Floor = FirstFloor });
+            _currentObserver.OnNext(new LiftCall { Floor = LiftConstants.FirstFloor });
 
             // Assert
             Assert.That(_liftEngineEvents.Count, Is.GreaterThan(0));
 
             Assert.That(_liftEngineEvents[0].Direction, Is.EqualTo(Direction.Down));
-            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(ThirdFloor));
+            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(LiftConstants.ThirdFloor));
         }
 
         [Test]
-        public void Test01_When_person_calls_lift_to_floor_number_then_lift_notifies_direction_and_location_for_every_floor_it_passes()
+        public void When_person_calls_lift_to_floor_number_then_lift_notifies_direction_and_location_for_every_floor_it_passes()
         {
             // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
+            var theLift = new ObservableLift(LiftConstants.GroundFloor, this);
             _liftStatuses.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftCall { Floor = ThirdFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = GroundFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = FirstFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = SecondFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = ThirdFloor });
+            _currentObserver.OnNext(new LiftCall { Floor = LiftConstants.ThirdFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.GroundFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.FirstFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.SecondFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.ThirdFloor });
 
             // Assert
             Assert.That(_liftStatuses.Count, Is.EqualTo(4));
 
             Assert.That(_liftStatuses[0].CurrentDirection, Is.EqualTo(Direction.Up));
-            Assert.That(_liftStatuses[0].CurrentFloor, Is.EqualTo(GroundFloor));
+            Assert.That(_liftStatuses[0].CurrentFloor, Is.EqualTo(LiftConstants.GroundFloor));
 
             Assert.That(_liftStatuses[1].CurrentDirection, Is.EqualTo(Direction.Up));
-            Assert.That(_liftStatuses[1].CurrentFloor, Is.EqualTo(FirstFloor));
+            Assert.That(_liftStatuses[1].CurrentFloor, Is.EqualTo(LiftConstants.FirstFloor));
 
             Assert.That(_liftStatuses[2].CurrentDirection, Is.EqualTo(Direction.Up));
-            Assert.That(_liftStatuses[2].CurrentFloor, Is.EqualTo(SecondFloor));
+            Assert.That(_liftStatuses[2].CurrentFloor, Is.EqualTo(LiftConstants.SecondFloor));
 
             Assert.That(_liftStatuses[3].CurrentDirection, Is.EqualTo(Direction.None));
-            Assert.That(_liftStatuses[3].CurrentFloor, Is.EqualTo(ThirdFloor));
+            Assert.That(_liftStatuses[3].CurrentFloor, Is.EqualTo(LiftConstants.ThirdFloor));
         }
 
         [Test]
-        public void Test01_When_person_calls_lift_to_higher_floor_number_then_lift_engine_is_asked_to_move_upwards_and_then_stopped_when_it_reaches_destination()
+        public void When_person_calls_lift_to_higher_floor_number_then_lift_engine_is_asked_to_move_upwards_and_then_stopped_when_it_reaches_destination()
         {
             // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
+            var theLift = new ObservableLift(LiftConstants.GroundFloor, this);
             _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftCall { Floor = ThirdFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = ThirdFloor });
+            _currentObserver.OnNext(new LiftCall { Floor = LiftConstants.ThirdFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.ThirdFloor });
 
             // Assert
             Assert.That(_liftEngineEvents.Count, Is.EqualTo(2));
 
             Assert.That(_liftEngineEvents[0].Direction, Is.EqualTo(Direction.Up));
-            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(GroundFloor));
+            Assert.That(_liftEngineEvents[0].CurrentFloor, Is.EqualTo(LiftConstants.GroundFloor));
 
             Assert.That(_liftEngineEvents[1].Direction, Is.EqualTo(Direction.None));
-            Assert.That(_liftEngineEvents[1].CurrentFloor, Is.EqualTo(FloorIsIrrelevant));
+            Assert.That(_liftEngineEvents[1].CurrentFloor, Is.EqualTo(LiftConstants.FloorIsIrrelevant));
         }
 
         [Test]
-        public void Test03_When_person_calls_lift_to_floor_number_then_lift_notifies_its_current_location()
-        {
-            // !! ToDo This is an integration test - it should not be here
-            // !! ToDo It is not testing the functionlaity of ObservableLift - what it is testing here is already covered in other tests
-            // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
-            _liftStatuses.Clear();
-            theLift.Subscribe(this);
-
-            // Act
-            _currentObserver.OnNext(new LiftCall { Floor = FirstFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = GroundFloor });
-
-            // Assert
-            Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
-
-            Assert.That(_liftStatuses[0].CurrentFloor, Is.EqualTo(GroundFloor));
-        }
-
-        [Test]
-        public void Test04_When_person_calls_lift_to_floor_number_then_lift_is_moved_to_that_floor()
+        public void When_person_calls_lift_to_floor_number_then_lift_is_moved_to_that_floor()
         {
             // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
+            var theLift = new ObservableLift(LiftConstants.GroundFloor, this);
             _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftCall { Floor = FourthFloor });
+            _currentObserver.OnNext(new LiftCall { Floor = LiftConstants.FourthFloor });
 
             // Assert
             Assert.That(_liftEngineEvents.Count, Is.GreaterThan(0));
 
             Assert.That(_liftEngineEvents[0].Direction, Is.EqualTo(Direction.Up));
-            Assert.That(_liftEngineEvents[0].LastFloor, Is.EqualTo(FourthFloor));
+            Assert.That(_liftEngineEvents[0].LastFloor, Is.EqualTo(LiftConstants.FourthFloor));
         }
 
         [Test]
-        public void Test05_When_lift_arrives_at_new_floor_after_person_calls_lift_then_lift_stops_moving()
+        public void When_lift_arrives_at_new_floor_after_person_calls_lift_then_lift_stops_moving()
         {
             // Arrange
-            var theLift = new ObservableLift(GroundFloor, this);
+            var theLift = new ObservableLift(LiftConstants.GroundFloor, this);
             _liftEngineEvents.Clear();
             theLift.Subscribe(this);
 
             // Act
-            _currentObserver.OnNext(new LiftCall { Floor = FourthFloor });
-            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = FourthFloor });
+            _currentObserver.OnNext(new LiftCall { Floor = LiftConstants.FourthFloor });
+            _currentObserver.OnNext(new LiftEngineUpwardsEvent { Floor = LiftConstants.FourthFloor });
 
             // Assert
             Assert.That(_liftEngineEvents.Count, Is.GreaterThan(1));
 
             Assert.That(_liftEngineEvents[_liftEngineEvents.Count - 1].Direction, Is.EqualTo(Direction.None));
-            Assert.That(_liftEngineEvents[_liftEngineEvents.Count - 1].CurrentFloor, Is.EqualTo(FloorIsIrrelevant));
+            Assert.That(_liftEngineEvents[_liftEngineEvents.Count - 1].CurrentFloor, Is.EqualTo(LiftConstants.FloorIsIrrelevant));
         }
 
         //[Test]
@@ -374,7 +325,7 @@ namespace ElevatorKata02
 
         public void Stop()
         {
-            AddLiftEvent(Direction.None, FloorIsIrrelevant, FloorIsIrrelevant);
+            AddLiftEvent(Direction.None, LiftConstants.FloorIsIrrelevant, LiftConstants.FloorIsIrrelevant);
         }
 
         private void AddLiftEvent(

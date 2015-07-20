@@ -57,7 +57,8 @@ namespace ElevatorKata02
                     liftStatus => liftStatus.Floor >= lastDownFloor,
                     liftStatus => DownEvent(liftStatus.Floor - 1), // iterator
                     liftStatus => DownEvent(liftStatus.Floor - 1), // actual value? Shouldn't use same val as iterator?
-                    i => TimeSpan.FromMilliseconds(TimeConstants.FloorInterval)
+                    i => TimeSpan.FromMilliseconds(TimeConstants.FloorInterval),
+                    _scheduler
                 );
 
             _liftEngineSubscription = liftEngine.Subscribe
