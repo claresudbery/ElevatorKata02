@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Reactive.Testing;
 using NUnit.Framework;
+using ReactiveUI.Testing;
 
 namespace ElevatorKata02
 {
@@ -25,16 +26,16 @@ namespace ElevatorKata02
             subject.Subscribe(value => seenValue = value);
 
             sched.AdvanceByMs(100);
-            Assert.Equal("m", seenValue);
+            Assert.AreEqual("m", seenValue);
 
             sched.AdvanceByMs(100);
-            Assert.Equal("o", seenValue);
+            Assert.AreEqual("o", seenValue);
 
             sched.AdvanceByMs(100);
-            Assert.Equal("r", seenValue);
+            Assert.AreEqual("r", seenValue);
 
             sched.AdvanceByMs(100);
-            Assert.Equal("k", seenValue);
+            Assert.AreEqual("k", seenValue);
         }
 
         [Test]
