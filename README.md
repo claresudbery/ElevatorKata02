@@ -54,6 +54,7 @@ The challenge here will be getting the scheduler to respond to generated lift-mo
 - eg we might not want a particular user to call the lift until we know the lift has moved past the second floor
 There is an article here about using schedulers for testing:
 http://www.introtorx.com/content/v1.0.10621.0/16_TestingRx.html
+and another one here: http://haacked.com/archive/2014/03/10/master-time-with-reactive-extensions/
 
 4. UI via console
 You want to see the lift arrive at different floors. 

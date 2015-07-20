@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
+using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using NUnit.Framework;
 using ReactiveUI.Testing;
@@ -10,33 +12,6 @@ namespace ElevatorKata02
     public class AcceptanceTests : ILiftMonitor
     {
         private List<LiftStatus> _liftStatuses = new List<LiftStatus>();
-
-        [Test]
-        public void Playing_with_test_scheduler()
-        {
-            var sched = new TestScheduler();
-            var subject = sched.CreateColdObservable(
-                sched.OnNextAt(100, "m"), // Provides "m" at 100 ms
-                sched.OnNextAt(200, "o"), // Provides "o" at 200 ms
-                sched.OnNextAt(300, "r"), // Provides "r" at 300 ms
-                sched.OnNextAt(400, "k")  // Provides "k" at 400 ms
-            );
-
-            string seenValue = null;
-            subject.Subscribe(value => seenValue = value);
-
-            sched.AdvanceByMs(100);
-            Assert.AreEqual("m", seenValue);
-
-            sched.AdvanceByMs(100);
-            Assert.AreEqual("o", seenValue);
-
-            sched.AdvanceByMs(100);
-            Assert.AreEqual("r", seenValue);
-
-            sched.AdvanceByMs(100);
-            Assert.AreEqual("k", seenValue);
-        }
 
         [Test]
         public void When_person_in_lift_enters_a_floor_number_then_lift_notifies_its_current_location()
@@ -50,6 +25,7 @@ namespace ElevatorKata02
 
             // Act
             theLift.OnNext(new LiftMoveRequest { Floor = LiftConstants.FirstFloor });
+            testScheduler.Start();
             testScheduler.AdvanceBy(1000000);
 
             // Assert
@@ -70,6 +46,7 @@ namespace ElevatorKata02
 
             // Act
             theLift.OnNext(new LiftCall { Floor = LiftConstants.FirstFloor });
+            testScheduler.Start();
             testScheduler.AdvanceBy(1000000);
 
             // Assert

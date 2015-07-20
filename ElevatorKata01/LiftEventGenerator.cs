@@ -35,7 +35,7 @@ namespace ElevatorKata02
         {
             IObservable<ILiftEvent> liftEngine = Observable.Generate
                 (
-                    UpEvent(currentFloor),
+                    UpEvent(currentFloor - 1),
                     liftStatus => liftStatus.Floor <= lastUpFloor,
                     liftStatus => UpEvent(liftStatus.Floor + 1), // iterator
                     liftStatus => UpEvent(liftStatus.Floor + 1), // actual value? Shouldn't use same val as iterator?
@@ -53,7 +53,7 @@ namespace ElevatorKata02
         {
             IObservable<ILiftEvent> liftEngine = Observable.Generate
                 (
-                    DownEvent(currentFloor),
+                    DownEvent(currentFloor + 1),
                     liftStatus => liftStatus.Floor >= lastDownFloor,
                     liftStatus => DownEvent(liftStatus.Floor - 1), // iterator
                     liftStatus => DownEvent(liftStatus.Floor - 1), // actual value? Shouldn't use same val as iterator?
