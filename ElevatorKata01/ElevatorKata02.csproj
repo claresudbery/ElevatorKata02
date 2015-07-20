@@ -60,6 +60,7 @@
     <Compile Include="ILiftEvent.cs" />
     <Compile Include="LiftCall.cs" />
     <Compile Include="LiftEngineDownwardsEvent.cs" />
+    <Compile Include="LiftEngineEvent.cs" />
     <Compile Include="LiftEngineUpwardsEvent.cs" />
     <Compile Include="LiftEventGenerator.cs" />
     <Compile Include="LiftMoveRequest.cs" />
