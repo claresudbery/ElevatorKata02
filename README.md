@@ -26,6 +26,12 @@ http://www.quora.com/Is-there-any-public-elevator-scheduling-algorithm-standard
 
 http://www.quora.com/Why-are-virtually-all-elevator-algorithms-so-inefficient
 
+ReactiveX installer:
+https://www.microsoft.com/en-us/download/details.aspx?id=30708
+ 
+ReactiveX tutorials (I’m working my way through “Curing the asynchronous blues with the Reactive Extensions for .NET” – see “Tutorials and Articles” at the bottom of the page):
+https://msdn.microsoft.com/en-gb/data/gg577611
+
 Paternoster: https://www.youtube.com/watch?v=Ro3Fc_yG3p0
 
 Current issues:
