@@ -22,11 +22,11 @@ namespace ElevatorKata02
             var theLift = new ObservableLift(LiftConstants.GroundFloor, theLiftEngine);
             _liftStatuses.Clear();
             theLift.Subscribe(this);
-
+            
             // Act
             theLift.OnNext(new LiftMoveRequest { Floor = LiftConstants.FirstFloor });
             testScheduler.Start();
-            testScheduler.AdvanceBy(1000000);
+            testScheduler.AdvanceBy(5);
 
             // Assert
             Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
@@ -47,7 +47,7 @@ namespace ElevatorKata02
             // Act
             theLift.OnNext(new LiftCall { Floor = LiftConstants.FirstFloor });
             testScheduler.Start();
-            testScheduler.AdvanceBy(1000000);
+            testScheduler.AdvanceBy(5);
 
             // Assert
             Assert.That(_liftStatuses.Count, Is.GreaterThan(0));
