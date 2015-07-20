@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcceptanceTests.cs" />
     <Compile Include="Call.cs" />
     <Compile Include="ILiftEventGenerator.cs" />
     <Compile Include="ILiftMonitor.cs" />
