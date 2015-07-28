@@ -4,7 +4,11 @@ elevator kata - second attempt
 In this version, I use a LiftEventGenerator class as the single source of events.
 This creates an easy way of faking events for test purposes, and means that we don't have to have any Thread.Sleep calls in tests.
 
-I strongly suspect this one is a crazy way of doing things (the code at the moment feels very tortuous), but I'm trying it anyway as a kind of intellectual* exercise.
+As I suspected, it turns out that this is a crazy way of doing things:
+ - the code is very tortuous
+ - it was all done to make testing easier, but that meant the code became hard to follow, and all for the sake of facilitating easier tests
+ - which is the wrong way to do things.
+I tried it as a kind of intellectual* exercise, but quickly saw that there were better ways of doing things.
 *self-indulgent
 
 The kata itself (see http://blog.milesburton.com/2013/03/28/elevator-kata-mind-bending-pairing-exercise/):
